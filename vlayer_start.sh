@@ -18,14 +18,19 @@ rm -rf bun.lockb node_modules
 bun install
 
 # Create a New Project (Change YOUR-PROJECT-NAME)
-vlayer init TEST --template simple-web-proof
-cd TEST
+read -p "项目名称: " project_name
+vlayer init $project_name --template simple-web-proof
+cd $project_name
 forge build
 
+read -p "JWT token: " token
+read -p "钱包私钥（带0x）: " private_key
 # Run Inside a Screen Session
-screen -S vlayer
 cd vlayer
-nano .env.testnet.local
+sed -i "s/VLAYER_API_TOKEN=.*$/VLAYER_API_TOKEN=$token/" .env.testnet.local
+sed -i "s/EXAMPLES_TEST_PRIVATE_KEY=.*$/EXAMPLES_TEST_PRIVATE_KEY=$private_key/" .env.testnet.local
+bun add @vlayer/sdk
 
 # Install Vlayer SDK & Run Prover
-bun add @vlayer/sdk
+# bun run prove:testnet
+screen -d -m -S vlayer bash -c "while true; do bun run prove:testnet; sleep 60; done"
