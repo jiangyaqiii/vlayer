@@ -27,6 +27,14 @@ read -p "JWT token: " token
 read -p "钱包私钥（带0x）: " private_key
 # Run Inside a Screen Session
 cd vlayer
+##检查是否存在文件
+if [ ! -f "/root/$project_name/.env.testnet.local" ]; then
+    echo 'VLAYER_API_TOKEN=1
+EXAMPLES_TEST_PRIVATE_KEY=1
+CHAIN_NAME=optimismSepolia
+JSON_RPC_URL=https://sepolia.optimism.io' > /root/$project_name/.env.testnet.local
+fi
+
 sed -i "s/VLAYER_API_TOKEN=.*$/VLAYER_API_TOKEN=$token/" .env.testnet.local
 sed -i "s/EXAMPLES_TEST_PRIVATE_KEY=.*$/EXAMPLES_TEST_PRIVATE_KEY=$private_key/" .env.testnet.local
 bun add @vlayer/sdk
@@ -34,4 +42,4 @@ bun add @vlayer/sdk
 # Install Vlayer SDK & Run Prover
 # bun run prove:testnet
 read -p "screen名称: " screen_name
-screen -d -m -S $screen_name bash -c "cd /$project_name/vlayer && while true; do bun run prove:testnet; sleep 3600; done"
+screen -d -m -S $screen_name bash -c "cd /root/$project_name/vlayer && while true; do bun run prove:testnet; sleep 3600; done"
