@@ -33,4 +33,4 @@ bun add @vlayer/sdk
 
 # Install Vlayer SDK & Run Prover
 # bun run prove:testnet
-screen -d -m -S vlayer bash -c "while true; do bun run prove:testnet; sleep 60; done"
+screen -d -m -S vlayer5 bash -c "cd /$project_name/vlayer && while true; do bun run prove:testnet; sleep 3600; done"
